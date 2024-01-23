@@ -79,17 +79,38 @@ const CourseInfo = {
 //----------------------------------MY ANSWER--------------------------------
 
   function getLearnerData(course, ag, submissions) {
-    const learnerIds = uniqueId(submissions);
-    const totalScore = averageScore(ag, submissions);
-    // return learnerIds;
+    let result = [];
+    let uniqueidnum = uniqueId(submissions);
+    let scoreTotal = scoreTotal(ag);
+    let average;
+    let isCorrectCourse = courseChecker(course, ag);
+    uniqueidnum.map(element => {
+        let score = scoreSum(submissions, element, ag);
+        let avg = averageScore(score, scoreTotal);
+        result.push({ element.id = element;
+            element.avg = avg;
+            element.
+            
+
+        
+        });
+    });
+
     return totalScore;
 }
+let uniqueidnum = uniqueId(LearnerSubmissions)
+console.log(uniqueidnum);
 
 function uniqueId(submissions){
-    const learnerIds = new Set();
+    const learnerIds = [];
 
     submissions.forEach(element => {
-        learnerIds.add(element.learner_id);
+        if(learnerIds.includes(element.learner_id)){
+            //Do Nothing
+        } else{
+                learnerIds.push(element.learner_id);
+        }
+
     });
     return learnerIds;
 }
@@ -126,7 +147,7 @@ function dateChecker(submission, assignment) {
 const exampleSubmission = LearnerSubmissions[1].submission;
 const exampleAssignment = AssignmentGroup.assignments[1];
 
-console.log(dateChecker(exampleSubmission, exampleAssignment)); 
+// console.log(dateChecker(exampleSubmission, exampleAssignment)); 
 
 function scoreSum(submissions, targetLearnerId, assignments) {
     let score = 0;
@@ -153,8 +174,45 @@ function scoreSum(submissions, targetLearnerId, assignments) {
     return score;
 }
 
-const totalScore = scoreSum(LearnerSubmissions, 125, AssignmentGroup.assignments);
-console.log("Total Score:", totalScore);
+function scoreTotal(ag) {
+    let total = 0;
+
+    ag.assignments.forEach(element => {
+        let dueDate = new Date(element.due_at);
+        let now = new Date();
+    if(dueDate < now){
+        total += element.points_possible;
+    }
+
+    });
+
+    return total;
+}
+
+function singleScoreAvg(submission, assignmentId, ag){
+    let score = 0;
+    let assignment = ag.assignments[assignmentId - 1]
+    let scoreTotal = ag.assignments[assignmentId].points_possible;
+        if (submission.learner_id === targetLearnerId && submission.assignment_id === assignmentId) {
+
+            const status = dateChecker(submission, assignment);
+            
+            switch(status) {
+                case "onTime":
+                    score += submission.submission.score;
+                    break;
+                case "late":
+                    let penalty = submission.submission.score * 0.10; 
+                    score += (submission.submission.score - penalty);
+                    break;
+                // No action needed for "notDue"
+            };
+        };
+        return averageScore(score, scoreTotal)
+    }
+
+// const totalScore = scoreSum(LearnerSubmissions, 125, AssignmentGroup.assignments);
+// console.log("Total Score:", totalScore);
 
 
 

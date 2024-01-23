@@ -111,20 +111,52 @@ function dateChecker(submission, assignment) {
     let due = new Date(assignment.due_at);
     let now = new Date();
 
+    // Check if the due date is in the past
     if (due < now) {
-        if (submitted <= due){
-            return true;
-        } else{
-            return "late";
-        }
+        // Check if the submission is late
+        return submitted > due ? "late" : "onTime";
     } else {
-        return false;
+        // If the due date is not yet passed, return "notDue"
+        return "notDue";
     }
 }
-const exampleSubmission = LearnerSubmissions[0].submission;
-const exampleAssignment = AssignmentGroup.assignments[0];
 
-console.log(dateChecker(exampleSubmission, exampleAssignment)); // Check if the submission was late
+
+
+const exampleSubmission = LearnerSubmissions[1].submission;
+const exampleAssignment = AssignmentGroup.assignments[1];
+
+console.log(dateChecker(exampleSubmission, exampleAssignment)); 
+
+function scoreSum(submissions, targetLearnerId, assignments) {
+    let score = 0;
+
+    submissions.forEach(submission => {
+        if (submission.learner_id === targetLearnerId) {
+            const assignment = assignments.find(a => a.id === submission.assignment_id);
+
+            const status = dateChecker(submission, assignment);
+            
+            switch(status) {
+                case "onTime":
+                    score += submission.submission.score;
+                    break;
+                case "late":
+                    let penalty = submission.submission.score * 0.10; 
+                    score += (submission.submission.score - penalty);
+                    break;
+                // No action needed for "notDue"
+            }
+        }
+    });
+
+    return score;
+}
+
+const totalScore = scoreSum(LearnerSubmissions, 125, AssignmentGroup.assignments);
+console.log("Total Score:", totalScore);
+
+
 
 //   function getLearnerData(course, ag, submissions) {
 //     // here, we would process this data to achieve the desired result.

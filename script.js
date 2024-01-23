@@ -98,18 +98,17 @@ function averageScore(scores, scoresTotal){
     return scores / scoresTotal;
 }
 
-function
+function courseChecker(course, ag){
+    if(course.id === ag.course_id){
+        return true;
+    } else{
+        return false;
+    }
+}
 
 
 //   function getLearnerData(course, ag, submissions) {
 //     // here, we would process this data to achieve the desired result.
-//     const obj = [];
-//     submissions.forEach(element => {
-//         if (element.learner_id !== element.learner_id){
-//             obj.push(element.learner_id);
-//             console.log(obj)
-//         }
-//     });
   
     // return result;
 //   }

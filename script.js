@@ -106,6 +106,25 @@ function courseChecker(course, ag){
     }
 }
 
+function dateChecker(submission, assignment) {
+    let submitted = new Date(submission.submitted_at);
+    let due = new Date(assignment.due_at);
+    let now = new Date();
+
+    if (due < now) {
+        if (submitted <= due){
+            return true;
+        } else{
+            return "late";
+        }
+    } else {
+        return false;
+    }
+}
+const exampleSubmission = LearnerSubmissions[0].submission;
+const exampleAssignment = AssignmentGroup.assignments[0];
+
+console.log(dateChecker(exampleSubmission, exampleAssignment)); // Check if the submission was late
 
 //   function getLearnerData(course, ag, submissions) {
 //     // here, we would process this data to achieve the desired result.
@@ -113,9 +132,9 @@ function courseChecker(course, ag){
     // return result;
 //   }
   
-  const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+//   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
-  console.log(result);
+//   console.log(result);
   
 
 //   const result = [

@@ -94,7 +94,11 @@ function uniqueId(submissions){
     return learnerIds;
 }
 
+function averageScore(scores, scoresTotal){
+    return scores / scoresTotal;
+}
 
+function
 
 
 //   function getLearnerData(course, ag, submissions) {

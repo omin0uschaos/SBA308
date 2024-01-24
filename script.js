@@ -89,7 +89,25 @@ function getLearnerData(course, ag, submissions) {
         console.error(error);
     }
     
+    try {
+        for (const element of ag.assignments) {
+            if (Number.isNaN(parseFloat(element.id))) {
+                throw new Error(`Id is not a number!`);
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
     
+    try {
+        for (const element of ag.assignments) {
+            if (Number.isNaN(parseFloat(element.points_possible))) {
+                throw new Error(`Points possible is not a number!`);
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
 
     let result = [];
     let uniqueIds = uniqueId(submissions);

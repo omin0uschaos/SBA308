@@ -105,12 +105,12 @@ function getLearnerData(course, ag, submissions) {
         ag.assignments.forEach(assignment => {
             if (new Date(assignment.due_at) < new Date()) {
                 let score = singleScoreAvg(submissions, learnerId, assignment.id, ag);
-                learnerData[assignment.id] = parseFloat(score.toFixed(2));
+                learnerData[assignment.id] = parseFloat(score.toFixed(3));
                 totalScore += score * assignment.points_possible;
             }
         });
 
-        learnerData.avg = totalPoints > 0 ? totalScore / totalPoints : 0;
+        learnerData.avg = totalPoints > 0 ? parseFloat((totalScore / totalPoints).toFixed(3)) : 0;
         result.push(learnerData);
     });
 
@@ -153,10 +153,9 @@ function dateChecker(submission, assignment) {
     if (due < now) {
         // Check if the submission is late
         return submitted > due ? "late" : "onTime";
-    } else {
-        // If the due date is not yet passed, return "notDue"
-        return "notDue";
-    }
+    } else if(assignment.points_possible === 0 || due > now) {
+        return "notDue"
+    } 
 }
 
 
@@ -212,6 +211,8 @@ function singleScoreAvg(submissions, learnerId, assignmentId, ag){
 
     let score = 0;
     let scoreTotal = assignment.points_possible;
+
+
 
     submissions.forEach(submission => {
         if (submission.learner_id === learnerId && submission.assignment_id === assignmentId) {

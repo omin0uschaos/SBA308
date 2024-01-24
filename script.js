@@ -120,10 +120,10 @@ function getLearnerData(course, ag, submissions) {
         };
         let totalScore = 0;
 
-        ag.assignments.forEach(assignment => {
+        ag.assignments.map(assignment => {
             if (new Date(assignment.due_at) < new Date()) {
                 let score = singleScoreAvg(submissions, learnerId, assignment.id, ag);
-                learnerData[assignment.id] = parseFloat(score.toFixed(3));
+                learnerData[parseFloat(assignment.id)] = parseFloat(score.toFixed(3));
                 totalScore += score * assignment.points_possible;
             }
         });

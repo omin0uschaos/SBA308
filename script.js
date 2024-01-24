@@ -80,7 +80,16 @@ const CourseInfo = {
 
 function getLearnerData(course, ag, submissions) {
     // Check if course and assignment group match
-    courseChecker(course, ag);
+    try {
+        if(courseChecker(course, ag)){
+        }   else{
+            throw new Error(`Course Id does not match`);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    
+    
 
     let result = [];
     let uniqueIds = uniqueId(submissions);
@@ -96,7 +105,7 @@ function getLearnerData(course, ag, submissions) {
         ag.assignments.forEach(assignment => {
             if (new Date(assignment.due_at) < new Date()) {
                 let score = singleScoreAvg(submissions, learnerId, assignment.id, ag);
-                learnerData[assignment.id] = score;
+                learnerData[assignment.id] = parseFloat(score.toFixed(2));
                 totalScore += score * assignment.points_possible;
             }
         });
@@ -108,8 +117,6 @@ function getLearnerData(course, ag, submissions) {
     return result;
 }
 
-let uniqueidnum = uniqueId(LearnerSubmissions)
-console.log(uniqueidnum);
 
 function uniqueId(submissions){
     const learnerIds = [];
@@ -125,9 +132,9 @@ function uniqueId(submissions){
     return learnerIds;
 }
 
-function averageScore(scores, scoresTotal){
-    return scores / scoresTotal;
-}
+// function averageScore(scores, scoresTotal){
+//     return scores / scoresTotal;
+// }
 
 function courseChecker(course, ag){
     if(course.id === ag.course_id){
@@ -159,30 +166,30 @@ const exampleAssignment = AssignmentGroup.assignments[1];
 
 // console.log(dateChecker(exampleSubmission, exampleAssignment)); 
 
-function scoreSum(submissions, targetLearnerId, assignments) {
-    let score = 0;
+// function scoreSum(submissions, targetLearnerId, assignments) {
+//     let score = 0;
 
-    submissions.forEach(submission => {
-        if (submission.learner_id === targetLearnerId) {
-            const assignment = assignments.find(a => a.id === submission.assignment_id);
+//     submissions.forEach(submission => {
+//         if (submission.learner_id === targetLearnerId) {
+//             const assignment = assignments.find(a => a.id === submission.assignment_id);
 
-            const status = dateChecker(submission, assignment);
+//             const status = dateChecker(submission, assignment);
             
-            switch(status) {
-                case "onTime":
-                    score += submission.submission.score;
-                    break;
-                case "late":
-                    let penalty = submission.submission.score * 0.10; 
-                    score += (submission.submission.score - penalty);
-                    break;
-                // No action needed for "notDue"
-            }
-        }
-    });
+//             switch(status) {
+//                 case "onTime":
+//                     score += submission.submission.score;
+//                     break;
+//                 case "late":
+//                     let penalty = submission.submission.score * 0.10; 
+//                     score += (submission.submission.score - penalty);
+//                     break;
+//                 // No action needed for "notDue"
+//             }
+//         }
+//     });
 
-    return score;
-}
+//     return score;
+// }
 
 function scoreTotal(ag) {
     let total = 0;
